@@ -7,7 +7,7 @@ pub mod ft {
     use super::*;
 
     pub fn initialize(_ctx: Context<InitializeTransfer>,
-    initializer_amount: u64,
+    _initializer_amount: u64,
     ) -> Result<()> {
         Ok(())
     }
