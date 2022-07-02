@@ -11,7 +11,16 @@ pub mod ft {
     ) -> Result<()> {
         Ok(())
     }
+
+    pub fn exchange(_ctx: Context<Exchange>) -> Result<()> {
+        todo!()
+    }
 }
 
 #[derive(Accounts)]
 pub struct InitializeTransfer {}
+
+#[derive(Accounts)]
+pub struct Exchange{
+    //todo!
+}
