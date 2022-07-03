@@ -24,3 +24,11 @@ pub struct InitializeTransfer {}
 pub struct Exchange{
     //todo!
 }
+
+
+//store state for our program
+#[account]
+#[derive(Default)]
+pub struct State{
+    
+}
