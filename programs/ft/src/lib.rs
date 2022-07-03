@@ -18,6 +18,13 @@ pub mod ft {
 }
 
 #[derive(Accounts)]
+#[account(
+    init,
+    payer = user_sending,
+    seeds=[b"state".as_ref(), user_sending.key().as_ref(),
+    user_receiving.key().as_ref()],
+    bump, 
+)]
 pub struct InitializeTransfer {}
 
 #[derive(Accounts)]
