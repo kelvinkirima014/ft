@@ -30,5 +30,19 @@ pub struct Exchange{
 #[account]
 #[derive(Default)]
 pub struct State{
-    
+
+    //Alice Pubkey
+    user_sending: Pubkey,
+
+    //Bob
+    user_receiving: Pubkey,
+
+    //mint of token that Alice want to send Bob
+    mint_of_token_being_sent: Pubkey,
+
+    //the amount of tokens Alice wants to send
+    tokens_amount: u64,
+
+    //enum to act as state machine
+    stage: u8,
 }
