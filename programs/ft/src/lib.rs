@@ -20,6 +20,8 @@ pub mod ft {
 #[derive(Accounts)]
 
 pub struct InitializeTransfer<'info>{
+    user_sending: Pubkey,
+
 
     #[account(
     init,
