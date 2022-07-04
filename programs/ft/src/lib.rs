@@ -18,18 +18,25 @@ pub mod ft {
 }
 
 #[derive(Accounts)]
-#[account(
+
+pub struct InitializeTransfer<'info>{
+
+    #[account(
     init,
     payer = user_sending,
+    space = 8 + 8*2, // 8 internal + 2 * space(u64)
     seeds=[b"state".as_ref(), user_sending.key().as_ref(),
     user_receiving.key().as_ref()],
     bump, 
-)]
-pub struct InitializeTransfer {}
+    )]
+    application_state: Account<'info, State>,
+    system_program: Program<'info, System>,
+
+}
 
 #[derive(Accounts)]
 pub struct Exchange{
-    //todo!
+    
 }
 
 
