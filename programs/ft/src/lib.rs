@@ -6,59 +6,44 @@ declare_id!("3Fzp351iQFQHLS2ePYBsE9uiRr9xee5tyyxzUHjEpak2");
 pub mod ft {
     use super::*;
 
-    pub fn initialize(_ctx: Context<InitializeTransfer>,
+    pub fn initialize(_ctx: Context<Initialize>,
     _initializer_amount: u64,
     ) -> Result<()> {
         Ok(())
     }
 
-    pub fn exchange(_ctx: Context<Exchange>) -> Result<()> {
+    pub fn deposit(_ctx: Context<Deposit>) -> Result<()> {
+        todo!()
+    }
+
+    pub fn withdraw(_ctx: Context<Withdraw>) -> Result<()> {
+        todo!()
+    }
+
+    pub fn pull_out(_ctx: Context<PullOut>) -> Result<()> {
         todo!()
     }
 }
 
 #[derive(Accounts)]
-
-pub struct InitializeTransfer<'info>{
+pub struct Initialize {
     
+}
 
-
-    #[account(
-    init,
-    payer = user_sending,
-    space = 8 + 8*2, // 8 internal + 2 * space(u64)
-    seeds=[b"state".as_ref(), user_sending.key().as_ref(),
-    user_receiving.key().as_ref()],
-    bump, 
-    )]
-    application_state: Account<'info, State>,
-    system_program: Program<'info, System>,
+#[derive(Accounts)]
+pub struct Deposit {
 
 }
 
 #[derive(Accounts)]
-pub struct Exchange{
+pub struct Withdraw {
+
+}
+
+#[derive(Accounts)]
+pub struct PullOut{
     
 }
 
 
-//store state for our program
-#[account]
-#[derive(Default)]
-pub struct State{
 
-    //Alice Pubkey
-    user_sending: Pubkey,
-
-    //Bob
-    user_receiving: Pubkey,
-
-    //mint of token that Alice want to send Bob
-    mint_of_token_being_sent: Pubkey,
-
-    //the amount of tokens Alice wants to send
-    tokens_amount: u64,
-
-    //enum to act as state machine
-    stage: u8,
-}
