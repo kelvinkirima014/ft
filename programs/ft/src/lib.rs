@@ -3,7 +3,7 @@ use anchor_spl::token::{Mint, Token, TokenAccount};
 
 //use token program accounts in Anchor
 
-declare_id!("3Fzp351iQFQHLS2ePYBsE9uiRr9xee5tyyxzUHjEpak2");
+declare_id!("ANMC4r582ErAaCrFFJZQ9PhkxtPmFpWFMkoZEEQT1mvk");
 
 #[program]
 pub mod ft {
@@ -14,13 +14,17 @@ pub mod ft {
     _initializer_amount: u64,
     ) -> Result<()> {
         
-        let _payment_initializer = &ctx.accounts.initializer;
+        let _initializer = &ctx.accounts.initializer;
         
         let _vault_account = &ctx.accounts.vault;
 
         let _initializer_token_account = &ctx.accounts.initializer_token_account;
 
         let _vault_token_account = &ctx.accounts;
+
+        ctx.accounts.vault.amount = _initializer_amount;
+
+        //transfer token ownership from initializer to vault
 
         Ok(())
 
@@ -42,14 +46,14 @@ pub struct InitializePayment<'info> {
         seeds = ["vault".as_bytes(), initializer.key().as_ref()],
         bump,
     )]  
-    pub vault: Account<'info, VaultAccount>, 
+    pub vault: Account<'info, Vault>, 
     system_program: Program<'info, System>, 
     token_program: Program<'info, Token> 
 
 }
 
 #[account]
-pub struct VaultAccount {
+pub struct Vault {
     authority: Pubkey,
     vault_token_account: Pubkey,
     bump: u8,
