@@ -16,11 +16,11 @@ pub mod ft {
         
         let _payment_initializer = &ctx.accounts.initializer;
         
-        let _vault_account = &ctx.accounts.vault_account;
+        let _vault_account = &ctx.accounts.vault;
 
         let _initializer_token_account = &ctx.accounts.initializer_token_account;
 
-        let _vault_token_account = &ctx.accounts.vault_token_account;
+        let _vault_token_account = &ctx.accounts;
 
         Ok(())
 
@@ -31,20 +31,27 @@ pub mod ft {
 #[derive(Accounts)]
 pub struct InitializePayment<'info> { 
     #[account(mut)]
-    signer: Signer<'info>,
-    #[account(init, payer = signer, space = 8)]
-    initializer: AccountInfo<'info>,
+    initializer: Signer<'info>,
+    token_mint: Account<'info, Mint>,
     #[account(mut)] 
     initializer_token_account: Account<'info, TokenAccount>,
-    #[account(mut)] 
-    vault_token_account: Account<'info, TokenAccount>, 
-    vault_account: Account<'info, VaultAccount>, 
+    #[account(
+        init,
+        payer = initializer,
+        space = 8 + 8 + 8,
+        seeds = ["vault".as_bytes(), initializer.key().as_ref()],
+        bump,
+    )]  
+    pub vault: Account<'info, VaultAccount>, 
     system_program: Program<'info, System>, 
-    token_program: Program<'info, Token> }
+    token_program: Program<'info, Token> 
+
+}
 
 #[account]
 pub struct VaultAccount {
-    pub authority: Pubkey,
-    pub deposit_token_account: Pubkey,
-    pub receiver_token_account: Pubkey,
+    authority: Pubkey,
+    vault_token_account: Pubkey,
+    bump: u8,
+    amount: u64,
 }
