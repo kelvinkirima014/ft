@@ -37,7 +37,20 @@ pub mod ft {
 
         Ok(())
     }
+
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+        todo!()
+    }
+
 }
+
+#[account]
+pub struct Vault {
+    authority: Pubkey,
+    bump: u8,
+    amount: u64,
+}
+
 
 #[derive(Accounts)]
 pub struct InitializePayment<'info> {
@@ -59,9 +72,8 @@ pub struct InitializePayment<'info> {
     token_program: Program<'info, Token>,
 }
 
-#[account]
-pub struct Vault {
-    authority: Pubkey,
-    bump: u8,
-    amount: u64,
+#[derive(Accounts)]
+pub struct  Withdraw {
+    
 }
+
