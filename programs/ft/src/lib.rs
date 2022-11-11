@@ -13,15 +13,14 @@ pub mod ft {
         ctx: Context<InitializePayment>,
         initializer_amount: u64,
     ) -> Result<()> {
+        //state of the vault, we'll use it to withdraw/cancel
+        // let vault = &mut ctx.accounts.vault;
+        // vault.authority= ctx.accounts.user_sending.key();
+
         let user_sending = &ctx.accounts.user_sending_token_account;
-        //let vault_account = &ctx.accounts.vault;
-
         let user_sending_token_account = &ctx.accounts.user_sending_token_account;
-
         let vault_token_account = &ctx.accounts.vault_token_account;
-
         ctx.accounts.vault.amount = initializer_amount;
-
         //transfer token ownership from initializer to vault
         anchor_spl::token::transfer(
             CpiContext::new(
@@ -38,7 +37,7 @@ pub mod ft {
         Ok(())
     }
 
-    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+    pub fn withdraw(_ctx: Context<Withdraw>, _amount: u64) -> Result<()> {
         todo!()
     }
 
@@ -59,6 +58,7 @@ pub struct InitializePayment<'info> {
     token_mint: Account<'info, Mint>,
     #[account(mut)]
     user_sending_token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
     vault_token_account: Account<'info, TokenAccount>,
     #[account(
         init,
@@ -74,6 +74,6 @@ pub struct InitializePayment<'info> {
 
 #[derive(Accounts)]
 pub struct  Withdraw {
-    
+
 }
 
