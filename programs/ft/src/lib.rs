@@ -9,53 +9,59 @@ declare_id!("ANMC4r582ErAaCrFFJZQ9PhkxtPmFpWFMkoZEEQT1mvk");
 pub mod ft {
     use super::*;
 
-
-    pub fn initialize_payment(ctx: Context<InitializePayment>,
-    _initializer_amount: u64,
+    pub fn initialize_payment(
+        ctx: Context<InitializePayment>,
+        _initializer_amount: u64,
     ) -> Result<()> {
-        
-        let _initializer = &ctx.accounts.initializer;
-        
-        let _vault_account = &ctx.accounts.vault;
+        let user_sending = &ctx.accounts.user_sending_token_account;
+        //let vault_account = &ctx.accounts.vault;
 
-        let _initializer_token_account = &ctx.accounts.initializer_token_account;
+        let user_sending_token_account = &ctx.accounts.user_sending_token_account;
 
-        let _vault_token_account = &ctx.accounts;
+        let vault_token_account = &ctx.accounts.vault_token_account;
 
         ctx.accounts.vault.amount = _initializer_amount;
 
         //transfer token ownership from initializer to vault
+        anchor_spl::token::transfer(
+            CpiContext::new(
+                ctx.accounts.token_program.to_account_info(),
+                anchor_spl::token::Transfer {
+                    from: user_sending_token_account.to_account_info(),
+                    to: vault_token_account.to_account_info(),
+                    authority: user_sending.to_account_info(),
+                },
+            ),
+            _initializer_amount,
+        )?;
 
         Ok(())
-
     }
-   
 }
 
 #[derive(Accounts)]
-pub struct InitializePayment<'info> { 
+pub struct InitializePayment<'info> {
     #[account(mut)]
-    initializer: Signer<'info>,
+    user_sending: Signer<'info>,
     token_mint: Account<'info, Mint>,
-    #[account(mut)] 
-    initializer_token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
+    user_sending_token_account: Account<'info, TokenAccount>,
+    vault_token_account: Account<'info, TokenAccount>,
     #[account(
         init,
-        payer = initializer,
+        payer = user_sending,
         space = 8 + 8 + 8,
-        seeds = ["vault".as_bytes(), initializer.key().as_ref()],
+        seeds = ["vault".as_bytes(), user_sending.key().as_ref()],
         bump,
-    )]  
-    pub vault: Account<'info, Vault>, 
-    system_program: Program<'info, System>, 
-    token_program: Program<'info, Token> 
-
+    )]
+    pub vault: Account<'info, Vault>,
+    system_program: Program<'info, System>,
+    token_program: Program<'info, Token>,
 }
 
 #[account]
 pub struct Vault {
     authority: Pubkey,
-    vault_token_account: Pubkey,
     bump: u8,
     amount: u64,
 }

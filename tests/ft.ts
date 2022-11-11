@@ -10,6 +10,7 @@ describe("ft", () => {
 
   it("Is initialized!", async () => {
     // Add your test here.
+    const tx = await program.methods.initializePayment().rpc()
    //console.log("Your transaction signature", tx);
   });
 });
