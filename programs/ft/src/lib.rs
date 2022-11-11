@@ -11,7 +11,7 @@ pub mod ft {
 
     pub fn initialize_payment(
         ctx: Context<InitializePayment>,
-        _initializer_amount: u64,
+        initializer_amount: u64,
     ) -> Result<()> {
         let user_sending = &ctx.accounts.user_sending_token_account;
         //let vault_account = &ctx.accounts.vault;
@@ -20,7 +20,7 @@ pub mod ft {
 
         let vault_token_account = &ctx.accounts.vault_token_account;
 
-        ctx.accounts.vault.amount = _initializer_amount;
+        ctx.accounts.vault.amount = initializer_amount;
 
         //transfer token ownership from initializer to vault
         anchor_spl::token::transfer(
@@ -32,7 +32,7 @@ pub mod ft {
                     authority: user_sending.to_account_info(),
                 },
             ),
-            _initializer_amount,
+            initializer_amount,
         )?;
 
         Ok(())
