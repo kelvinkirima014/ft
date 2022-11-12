@@ -37,8 +37,25 @@ pub mod ft {
         Ok(())
     }
 
-    pub fn withdraw(_ctx: Context<Withdraw>, _amount: u64) -> Result<()> {
-        todo!()
+    pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
+        let user_receiving = &ctx.accounts.user_receiving;
+        let user_receiving_token_account = &ctx.accounts.user_receiving_token_account;
+        let vault_token_account = &ctx.accounts.vault_token_account;
+
+        anchor_spl::token::transfer(
+            CpiContext::new_with_signer(
+                ctx.accounts.token_program.to_account_info(),
+                anchor_spl::token::Transfer{
+                from: vault_token_account.to_account_info(),
+                to: user_receiving_token_account.to_account_info(),
+                authority: vault_token_account.to_account_info(),
+            }, 
+            &[&[ctx.accounts.vault.authority.as_ref(), &[ctx.accounts.vault.bump]]]
+        ),     
+            amount
+        )?;
+
+        Ok(())
     }
 
 }
@@ -73,7 +90,22 @@ pub struct InitializePayment<'info> {
 }
 
 #[derive(Accounts)]
-pub struct  Withdraw {
-
+pub struct Withdraw<'info> {
+    #[account(mut)]
+    pub user_receiving: Signer<'info>,
+    #[account(mut)]
+    user_receiving_token_account: Account<'info, TokenAccount>,
+    #[account(mut)]
+    pub vault_token_account: Account<'info, TokenAccount>,
+    #[account(
+        init,
+        payer = user_receiving,
+        space = 8 + 8 + 8,
+        seeds = ["vault".as_bytes(), user_receiving.key().as_ref()],
+        bump,
+    )]
+    pub vault: Account<'info, Vault>,
+    system_program: Program<'info, System>,
+    token_program: Program<'info, Token>,
 }
 
