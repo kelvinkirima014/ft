@@ -38,7 +38,7 @@ pub mod ft {
     }
 
     pub fn withdraw(ctx: Context<Withdraw>, amount: u64) -> Result<()> {
-        let user_receiving = &ctx.accounts.user_receiving;
+        let vault_account =  &ctx.accounts.vault_account;
         let user_receiving_token_account = &ctx.accounts.user_receiving_token_account;
         let vault_token_account = &ctx.accounts.vault_token_account;
 
@@ -48,7 +48,7 @@ pub mod ft {
                 anchor_spl::token::Transfer{
                 from: vault_token_account.to_account_info(),
                 to: user_receiving_token_account.to_account_info(),
-                authority: vault_token_account.to_account_info(),
+                authority: vault_account.to_account_info(),
             }, 
             &[&[ctx.accounts.vault.authority.as_ref(), &[ctx.accounts.vault.bump]]]
         ),     
@@ -72,6 +72,8 @@ pub struct Vault {
 pub struct InitializePayment<'info> {
     #[account(mut)]
     user_sending: Signer<'info>,
+    #[account()]
+    vault_account: Account<'info, Vault>,
     token_mint: Account<'info, Mint>,
     #[account(mut)]
     user_sending_token_account: Account<'info, TokenAccount>,
@@ -92,16 +94,19 @@ pub struct InitializePayment<'info> {
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
     #[account(mut)]
-    pub user_receiving: Signer<'info>,
+   // pub user_receiving: Signer<'info>,
+    #[account()]
+    vault_account: Account<'info, Vault>,
+    token_mint: Account<'info, Mint>,
     #[account(mut)]
     user_receiving_token_account: Account<'info, TokenAccount>,
     #[account(mut)]
     pub vault_token_account: Account<'info, TokenAccount>,
     #[account(
         init,
-        payer = user_receiving,
+        payer = vault_account,
         space = 8 + 8 + 8,
-        seeds = ["vault".as_bytes(), user_receiving.key().as_ref()],
+        seeds = ["vault".as_bytes(), vault_account.key().as_ref()],
         bump,
     )]
     pub vault: Account<'info, Vault>,
