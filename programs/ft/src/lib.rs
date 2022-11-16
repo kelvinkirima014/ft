@@ -93,10 +93,10 @@ pub struct InitializePayment<'info> {
 
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
-    #[account(mut)]
+    //#[account(mut)]
    // pub user_receiving: Signer<'info>,
-    #[account()]
-    vault_account: Account<'info, Vault>,
+    #[account(mut)]
+    vault_account: Signer<'info>,
     token_mint: Account<'info, Mint>,
     #[account(mut)]
     user_receiving_token_account: Account<'info, TokenAccount>,
