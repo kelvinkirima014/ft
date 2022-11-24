@@ -44,7 +44,9 @@ pub mod ft {
         let vault_account =  &ctx.accounts.vault_account;
         let user_receiving_token_account = &ctx.accounts.user_receiving_token_account;
         let vault_token_account = &ctx.accounts.vault_token_account;
-
+        let vault = &mut ctx.accounts.vault;
+        vault.amount = amount;
+        //transfer vaulted tokens to receiver
         anchor_spl::token::transfer(
             CpiContext::new_with_signer(
                 ctx.accounts.token_program.to_account_info(),
@@ -53,7 +55,7 @@ pub mod ft {
                 to: user_receiving_token_account.to_account_info(),
                 authority: vault_account.to_account_info(),
             }, 
-            &[&["vault".as_bytes(), ctx.accounts.vault.authority.as_ref(), &[ctx.accounts.vault.bump]]]
+            &[&["vault".as_bytes(), vault.authority.as_ref(), &[vault.bump]]]
         ),     
             amount
         )?;
