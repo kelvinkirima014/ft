@@ -53,7 +53,7 @@ pub mod ft {
                 to: user_receiving_token_account.to_account_info(),
                 authority: vault_account.to_account_info(),
             }, 
-            &[&[ctx.accounts.vault.authority.as_ref(), &[ctx.accounts.vault.bump]]]
+            &[&["vault".as_bytes(), ctx.accounts.vault.authority.as_ref(), &[ctx.accounts.vault.bump]]]
         ),     
             amount
         )?;
