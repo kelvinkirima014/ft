@@ -13,11 +13,12 @@ pub mod ft {
         ctx: Context<InitializePayment>,
         initializer_amount: u64,
     ) -> Result<()> {
-        //state of the vault, we'll use it to withdraw/cancel
-        // let vault = &mut ctx.accounts.vault;
-        // vault.authority= ctx.accounts.user_sending.key();
+        // state of the vault, we'll use it to withdraw/cancel
+        let vault = &mut ctx.accounts.vault;
+        vault.authority= ctx.accounts.user_sending.key();
 
-        let user_sending = &ctx.accounts.user_sending_token_account;
+
+        let user_sending = &ctx.accounts.user_sending;
         let user_sending_token_account = &ctx.accounts.user_sending_token_account;
         let vault_token_account = &ctx.accounts.vault_token_account;
         ctx.accounts.vault.amount = initializer_amount;
