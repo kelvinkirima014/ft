@@ -15,7 +15,7 @@ pub mod ft {
     ) -> Result<()> {
         // state of the vault, we'll use it to withdraw/cancel
         let vault = &mut ctx.accounts.vault;
-        vault.authority= ctx.accounts.user_sending.key();
+        //vault.authority= ctx.accounts.user_sending.key();
         vault.amount = initializer_amount;
         let user_sending = &ctx.accounts.user_sending;
         let user_sending_token_account = &ctx.accounts.user_sending_token_account;
@@ -106,11 +106,9 @@ pub struct Withdraw<'info> {
     #[account(mut)]
     pub vault_token_account: Account<'info, TokenAccount>,
     #[account(
-        init,
-        payer = vault_account,
-        space = 8 + 8 + 8,
+        mut,
         seeds = ["vault".as_bytes(), vault_account.key().as_ref()],
-        bump,
+        bump = vault.bump,
     )]
     pub vault: Account<'info, Vault>,
     system_program: Program<'info, System>,
