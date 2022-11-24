@@ -24,7 +24,9 @@ pub mod ft {
         //transfer token ownership from initializer to vault
         anchor_spl::token::transfer(
             CpiContext::new(
+                //program arg
                 ctx.accounts.token_program.to_account_info(),
+                //accounts args
                 anchor_spl::token::Transfer {
                     from: user_sending_token_account.to_account_info(),
                     to: vault_token_account.to_account_info(),
@@ -33,6 +35,8 @@ pub mod ft {
             ),
             initializer_amount,
         )?;
+
+        msg!("Initialized new Fund Transfer instance for {}", initializer_amount);
 
         Ok(())
     }
