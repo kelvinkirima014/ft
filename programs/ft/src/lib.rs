@@ -1,8 +1,6 @@
 use anchor_lang::prelude::*;
 use anchor_spl::token::{Mint, Token, TokenAccount};
 
-//use token program accounts in Anchor
-
 declare_id!("ANMC4r582ErAaCrFFJZQ9PhkxtPmFpWFMkoZEEQT1mvk");
 
 #[program]
@@ -98,8 +96,6 @@ pub struct InitializePayment<'info> {
 
 #[derive(Accounts)]
 pub struct Withdraw<'info> {
-    //#[account(mut)]
-   // pub user_receiving: Signer<'info>,
     #[account(mut)]
     vault_account: Signer<'info>,
     token_mint: Account<'info, Mint>,
