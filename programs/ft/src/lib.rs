@@ -16,12 +16,10 @@ pub mod ft {
         // state of the vault, we'll use it to withdraw/cancel
         let vault = &mut ctx.accounts.vault;
         vault.authority= ctx.accounts.user_sending.key();
-
-
+        vault.amount = initializer_amount;
         let user_sending = &ctx.accounts.user_sending;
         let user_sending_token_account = &ctx.accounts.user_sending_token_account;
         let vault_token_account = &ctx.accounts.vault_token_account;
-        ctx.accounts.vault.amount = initializer_amount;
         //transfer token ownership from initializer to vault
         anchor_spl::token::transfer(
             CpiContext::new(
