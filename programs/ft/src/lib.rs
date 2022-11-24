@@ -8,14 +8,14 @@ pub mod ft {
     use super::*;
 
     pub fn initialize_payment(
-        ctx: Context<InitializePayment>,
+        ctx: Context<InitializeTransfer>,
         initializer_amount: u64,
     ) -> Result<()> {
-        // state of the vault, we'll use it to withdraw/cancel
         let vault = &mut ctx.accounts.vault;
-        //vault.authority= ctx.accounts.user_sending.key();
         vault.amount = initializer_amount;
+        vault.mint_token = ctx.accounts.token_mint.key();
         let user_sending = &ctx.accounts.user_sending;
+        vault.authority = user_sending.key();
         let user_sending_token_account = &ctx.accounts.user_sending_token_account;
         let vault_token_account = &ctx.accounts.vault_token_account;
         //transfer token ownership from initializer to vault
@@ -68,11 +68,12 @@ pub struct Vault {
     authority: Pubkey,
     bump: u8,
     amount: u64,
+    mint_token: Pubkey,
 }
 
 
 #[derive(Accounts)]
-pub struct InitializePayment<'info> {
+pub struct InitializeTransfer<'info> {
     #[account(mut)]
     user_sending: Signer<'info>,
     #[account()]
