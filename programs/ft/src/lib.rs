@@ -7,7 +7,7 @@ declare_id!("ANMC4r582ErAaCrFFJZQ9PhkxtPmFpWFMkoZEEQT1mvk");
 pub mod ft {
     use super::*;
 
-    pub fn initialize_payment(
+    pub fn initialize_transfer(
         ctx: Context<InitializeTransfer>,
         initializer_amount: u64,
     ) -> Result<()> {
