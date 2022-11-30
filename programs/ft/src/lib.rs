@@ -114,3 +114,5 @@ pub struct Withdraw<'info> {
     token_program: Program<'info, Token>,
 }
 
+#[derive(Accounts)]
+pub struct Cancel {}
