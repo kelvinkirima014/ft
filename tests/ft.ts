@@ -25,16 +25,16 @@ describe("ft", () => {
 
   let vault: anchor.web3.PublicKey;
 
-  before(async() => {
+  it("Initializes Fund Transfer", async () => {
 
     let mint = await spl.Token.createMint(
-    provider.connection,
-    payer,
-    provider.wallet.publicKey,
-    provider.wallet.publicKey,
-    7,
-    spl.TOKEN_PROGRAM_ID,
-  );
+      provider.connection,
+      payer,
+      provider.wallet.publicKey,
+      provider.wallet.publicKey,
+      7,
+      spl.TOKEN_PROGRAM_ID,
+    );
 
       //sender's token account
     let sender_token_account = await mint.createAccount(user_sending);
@@ -42,15 +42,14 @@ describe("ft", () => {
 
     //vault token account
     let vault_token_account = await mint.createAccount(vault_account.publicKey)
-
-    it("Initializes Fund Transfer", async () => {
       //airdrop tokens to payer
-      await provider.connection.requestAirdrop(
+      let airdrop = await provider.connection.requestAirdrop(
         payer.publicKey, 1 * LAMPORTS_PER_SOL
       )
-    });
 
   });
+
+  
 
   
 });
